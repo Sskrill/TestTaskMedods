@@ -18,16 +18,16 @@ func TestUserDB_Create(t *testing.T) {
 	defer db.Close()
 	sqlxDB := sqlx.NewDb(db, "postgres")
 	userDB := NewUserDB(sqlxDB)
-	registeredAt := time.Now()
+
 	mock.ExpectExec("INSERT INTO users").
-		WithArgs("MedodsTest", "MedodsTest@mail.ru", "123456789", registeredAt).
+		WithArgs("MedodsTest", "MedodsTest@mail.ru", "123456789", time.Now()).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	ctx := context.Background()
 	user := domain.User{
 		Name:         "MedodsTest",
 		Email:        "MedodsTest@mail.ru",
 		Password:     "123456789",
-		RegisteredAt: registeredAt,
+		RegisteredAt: time.Now(),
 	}
 	err = userDB.Create(ctx, user)
 	if err != nil {
@@ -48,10 +48,8 @@ func TestUserDB_GetByParams(t *testing.T) {
 	sqlxDB := sqlx.NewDb(db, "postgres")
 	userDB := NewUserDB(sqlxDB)
 
-	registeredAt := time.Now()
-
 	rows := sqlmock.NewRows([]string{"name", "email", "registered_at", "id"}).
-		AddRow("MedodsTest", "MedodsTest@mail.ru", registeredAt, 1)
+		AddRow("MedodsTest", "MedodsTest@mail.ru", time.Now(), 1)
 	mock.ExpectQuery("SELECT name,email,registered_at,id FROM users WHERE email=\\$1 AND password=\\$2").
 		WithArgs("MedodsTest@mail.ru", "123456789").
 		WillReturnRows(rows)
