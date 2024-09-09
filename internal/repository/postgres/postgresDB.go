@@ -16,7 +16,7 @@ type postgresDB struct {
 func NewPostgresDB(db *sqlx.DB) *postgresDB { return &postgresDB{db} }
 
 func (pDB *postgresDB) Migration() {
-	pDB.db.MustExec(`CREATE TABLE users(
+	pDB.db.Exec(`CREATE TABLE users(
   id SERIAL PRIMARY KEY,
 name VARCHAR(25) NOT NULL,
 password VARCHAR(250) NOT NULL,

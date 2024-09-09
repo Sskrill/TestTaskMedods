@@ -17,8 +17,8 @@ func Run() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	//pgDB := pgSql.NewPostgresDB(pg) // убрать коментарии при первом запуске
-	//pgDB.Migration()
+	pgDB := pgSql.NewPostgresDB(pg)
+	pgDB.Migration()
 	userDB := pgSql.NewUserDB(pg)
 	tokenDB := pgSql.NewTokensDB(pg)
 	passwordHasher := hasher.NewHasher(os.Getenv("Salt"))
